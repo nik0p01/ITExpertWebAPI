@@ -40,9 +40,9 @@ namespace ITExpertWebAPI.Controllers
         /// Возвращает данные клиенту из таблицы в виде json
         /// </summary>
         [HttpGet]
-        public async Task<IActionResult> GetDataAsync(int? code, string? value)
+        public async Task<IActionResult> GetDataAsync(string? value)
         {
-            var data = await _dataManipulation.GetDataObjectsAsync(code, value);
+            var data = await _dataManipulation.GetDataObjectsAsync(value);
 
             return Ok(data);
         }

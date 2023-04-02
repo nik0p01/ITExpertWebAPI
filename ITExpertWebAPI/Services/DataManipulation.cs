@@ -23,7 +23,7 @@ namespace ITExpertWebAPI.Services
             {
                 _context.DataObjects.RemoveRange(_context.DataObjects);
                 await _context.SaveChangesAsync();
-                var ordered = data.Select(p=>new KeyValuePair<int, string>(int.Parse(p.FirstOrDefault().Key),p.FirstOrDefault().Value)).OrderBy(p => p.Key);
+                var ordered = data.Select(p => new KeyValuePair<int, string>(int.Parse(p.FirstOrDefault().Key), p.FirstOrDefault().Value)).OrderBy(p => p.Key);
                 int count = 0;
                 foreach (var dataObject in ordered)
                 {
@@ -33,7 +33,7 @@ namespace ITExpertWebAPI.Services
                 await _context.SaveChangesAsync();
             }
 
-            catch (FormatException ex) 
+            catch (FormatException ex)
             {
                 _logger.LogError(ex, "Code is not number");
                 throw;
@@ -45,13 +45,13 @@ namespace ITExpertWebAPI.Services
             }
         }
 
-        public async Task<ICollection<DataObject>> GetDataObjectsAsync(int? code, string? value)
+        public async Task<ICollection<DataObject>> GetDataObjectsAsync(string? value)
         {
             var query = _context.DataObjects.AsQueryable();
 
-            if (code.HasValue || (value != null))
+            if (value != null)
             {
-                query = query.Where(d => (!code.HasValue || (d.Code == code.Value)) && ((value == null) || (d.Value == value)));
+                query = query.Where(d => d.Value.Contains(value));
             }
 
             var data = await query.Select(d => new DataObject { Number = d.Number, Code = d.Code, Value = d.Value }).ToListAsync();
